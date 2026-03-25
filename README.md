@@ -30,7 +30,9 @@ Demonstration of basic security practices (eg SQL injection, data validation)
 Process
 
 Create a functioning transaction: You must create a shopping-style website where the shopper can pick from a list of products, add products to a cart, change the purchased quantity of each item, remove unwanted items from the cart, add their (simplified) delivery details (email address, phone number, suburb) and complete the sale. We are not considering additional costs (delivery charges) in this project.
+
 Create an admin sales summary: Make it so the site’s owner (admin) can view the completed sales, identifying each purchaser with the cost price and sale price of each sale. 
+
 Make a database of products: Make a database and populate it with no less than 10 (digital) products of your choosing. Each product is to have: 
 Product Title
 Product Description 
@@ -39,6 +41,7 @@ Sell Price
 Product Image 
 
 The user experience and visual aspects (eg colour palette) are entirely at your discretion. As part of your presentation, you will justify your decisions. Whilst the products will be sourced via the database, you don’t need to develop a user-level maintenance page. Any product changes (description, etc) are done directly to the database.
+
 Create your presentation: In your group, make a 5-minute ‘Presentation to the Class’ showcasing your website. Factor in a further 2 minutes for Q&A from all attendees (so 7 minutes in total). You must demonstrate the features of your site, showing how each type of user (shopper/admin) will interact with the site. Be sure to demonstrate both technical and functional aspects of your site and justify your choice of operations and colour palette. Make sure to also include a breakdown of how each student contributed to the project (visualise this in a simple table).
 
 
