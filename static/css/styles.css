@@ -1,0 +1,529 @@
+/* ------------------------------
+   GLOBAL VARIABLES
+------------------------------ */
+/* Shared theme tokens for consistent light UI */
+:root {
+  --bg: white;
+  --text: black;
+  --text-muted: grey;
+
+  --accent: crimson;
+  --accent-hover: red;
+
+  --radius: 14px;
+  --shadow: 0 8px 28px rgba(0,0,0,0.15);
+}
+
+/* Input focus styling for clearer form interaction */
+input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(215, 38, 56, 0.25);
+  transition: 0.2s ease;
+}
+
+/* Smooth global fade-in animation */
+body {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+
+/* ------------------------------
+   RESET + BASE
+------------------------------ */
+/* Base typography + layout reset */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+a {
+  text-decoration: none;
+  color: var(--text);
+}
+
+/* Standard content container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+
+/* ------------------------------
+   HEADER
+------------------------------ */
+/* Sticky top navigation bar */
+.header {
+  background: var(--bg);
+  border-bottom: 1px solid white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Header layout structure */
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Brand styling */
+.logo {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+/* Nav underline animation */
+.nav a {
+  position: relative;
+}
+
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: var(--accent);
+  transition: 0.25s ease;
+}
+
+.nav a:hover::after {
+  width: 100%;
+}
+
+/* Cart badge indicator */
+.cart-badge {
+  background: var(--accent);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  margin-left: 6px;
+}
+
+
+/* ------------------------------
+    BUTTONS
+------------------------------ */
+/* Shared button styling */
+.btn {
+  padding: 0.7rem 1.4rem;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  transition: 0.25s ease;
+  font-weight: 600;
+}
+
+/* Primary action button */
+.btn-primary {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 4px 14px rgba(215, 38, 56, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  background: var(--accent-hover);
+  box-shadow: 0 6px 20px rgba(255, 46, 46, 0.55);
+}
+
+/* Disabled button state */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* ------------------------------
+   MOBILE NAV
+------------------------------ */
+/* Mobile hamburger toggle */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 2rem;
+}
+
+/* Slide-down mobile menu */
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  background: #f5f5f5;
+  padding: 1rem;
+  animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile nav links */
+.mobile-nav a {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid white;
+}
+
+
+/* ------------------------------
+   HERO SECTION
+------------------------------ */
+/* Large promotional banner */
+.hero {
+  background: #000;
+  color: white;
+  padding: 6rem 1.5rem;
+  border-radius: var(--radius);
+  text-align: center;
+  margin-bottom: 3rem;
+  box-shadow: var(--shadow);
+}
+
+.hero-content h1 {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  color: #d1d1d1;
+  margin-bottom: 2rem;
+}
+
+/* Hero call-to-action button */
+.hero-btn {
+  font-size: 1.1rem;
+  padding: 0.9rem 2rem;
+}
+
+
+/* ------------------------------
+   PRODUCT CARDS
+------------------------------ */
+/* Base product card styling */
+.product-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: 0.25s ease;
+}
+
+/* Hover lift effect */
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+}
+
+/* Product image formatting */
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+
+/* ------------------------------
+   PAGE HEADING
+------------------------------ */
+/* Standard page title styling */
+.page-heading {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: var(--text);
+}
+
+
+/* ------------------------------
+   PRODUCT GRID
+------------------------------ */
+/* Responsive product grid layout */
+.products-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+
+/* ------------------------------
+   PRODUCT CARD
+------------------------------ */
+/* Product card content layout */
+.product-info {
+  padding: 1.2rem;
+}
+
+.product-info h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+/* Price highlight */
+.product-price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+/* Add-to-cart button */
+.product-btn {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+}
+
+
+/* ------------------------------
+   CART TABLE
+------------------------------ */
+/* Main cart table styling */
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+/* Table header */
+.cart-table th {
+  background: #000;
+  color: white;
+  padding: 1rem;
+  text-align: left;
+}
+
+/* Table cells */
+.cart-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+/* Product cell layout */
+.cart-product {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cart-product img {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius);
+  object-fit: cover;
+}
+
+/* Quantity controls */
+.qty-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.qty-btn {
+  background: #000;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.qty-btn:hover {
+  background: var(--accent);
+}
+
+/* Quantity number */
+.qty-number {
+  font-weight: bold;
+}
+
+/* Remove button */
+.remove-btn {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.remove-btn:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* Cart summary section */
+.cart-summary {
+  text-align: right;
+}
+
+.cart-summary h3 span {
+  color: var(--accent);
+}
+
+/* Checkout button */
+.checkout-btn {
+  margin-top: 1rem;
+  display: inline-block;
+  padding: 0.9rem 2rem;
+  font-size: 1.1rem;
+}
+
+
+/* ------------------------------
+   RESPONSIVE CART
+------------------------------ */
+/* Mobile-friendly cart layout */
+@media (max-width: 768px) {
+  .cart-table thead {
+    display: none;
+  }
+
+  .cart-table tr {
+    display: block;
+    margin-bottom: 1.5rem;
+    border: 1px solid #eee;
+    border-radius: var(--radius);
+    padding: 1rem;
+  }
+
+  .cart-table td {
+    display: flex;
+    justify-content: space-between;
+    border: none;
+    padding: 0.5rem 0;
+  }
+
+  .cart-product {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+
+/* ------------------------------
+   CHECKOUT CARD
+------------------------------ */
+/* Checkout form container */
+.checkout-card {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 500px;
+  margin: 0 auto 3rem auto;
+}
+
+/* Checkout form layout */
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Checkout labels */
+.checkout-form label {
+  font-weight: bold;
+  color: var(--text);
+}
+
+/* Checkout inputs */
+.checkout-form input {
+  padding: 0.9rem;
+  border-radius: var(--radius);
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  transition: 0.2s ease;
+}
+
+/* Input focus glow */
+.checkout-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(215, 38, 56, 0.25);
+}
+
+/* Submit button */
+.checkout-submit {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+}
+
+
+/* ------------------------------
+   SUCCESS PAGE
+------------------------------ */
+/* Order confirmation card */
+.success-card {
+  background: white;
+  padding: 3rem 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 500px;
+  margin: 0 auto 3rem auto;
+  text-align: center;
+}
+
+/* Success title */
+.success-card h2 {
+  margin-top: 0;
+  font-size: 2rem;
+  color: var(--accent);
+}
+
+/* Success icon */
+.success-icon {
+  font-size: 4rem;
+  color: var(--accent);
+  margin: 1rem 0;
+}
+
+/* Subtext styling */
+.success-subtext {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+/* Return button */
+.success-btn {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+
+/* ------------------------------
+   FOOTER
+------------------------------ */
+/* Simple footer styling */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+
+/* ------------------------------
+   RESPONSIVE
+------------------------------ */
+/* Global responsive adjustments (placeholder) */

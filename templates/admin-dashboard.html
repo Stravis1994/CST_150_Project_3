@@ -1,7 +1,56 @@
 {% extends "admin-base.html" %}
 
-{% block head %}{% endblock %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
 
-{% block body %}
+{% block content %}
+
+<!-- Dashboard metric overview -->
+<div class="dashboard-grid">
+
+    <!-- Total revenue summary -->
+    <div class="admin-card metric-card">
+        <h3>Total Sales</h3>
+        <p class="metric-value">${{ total_sales }}</p>
+    </div>
+
+    <!-- Total completed orders -->
+    <div class="admin-card metric-card">
+        <h3>Total Orders</h3>
+        <p class="metric-value">{{ total_orders }}</p>
+    </div>
+
+    <!-- Overall profit calculation -->
+    <div class="admin-card metric-card">
+        <h3>Total Profit</h3>
+        <p class="metric-value">${{ total_profit }}</p>
+    </div>
+
+</div>
+
+<!-- Latest customer orders for quick review -->
+<div class="admin-card">
+    <h3 style="margin-top: 0; color: var(--accent);">Recent Orders</h3>
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for order in recent_orders %}
+            <tr>
+                <td>{{ order.customer }}</td>
+                <td>${{ order.total }}</td>
+                <td>{{ order.date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}

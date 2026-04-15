@@ -1,9 +1,20 @@
-<!-- Home Page -->
 {% extends "base.html" %}
 
-{% block head %}{% endblock %}
+{% block title %}Home{% endblock %}
 
-{% block body %}
-<h1>Welcome to the Home Page</h1>
-<p>This is the main content of the home page.</p>
+{% block content %}
+
+<!-- Hero section introducing the shop -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Welcome to TCG Card Shop</h1>
+        <p>Your destination for premium digital products.</p>
+
+        <!-- Call-to-action button -->
+        <a href="{{ url_for('products') }}" class="btn btn-primary hero-btn">
+            Shop Now
+        </a>
+    </div>
+</section>
+
 {% endblock %}

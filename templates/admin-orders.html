@@ -1,7 +1,49 @@
 {% extends "admin-base.html" %}
 
-{% block head %}{% endblock %}
+{% block title %}Orders{% endblock %}
+{% block page_title %}Completed Orders{% endblock %}
 
-{% block body %}
+{% block content %}
+
+<!-- Completed sales overview -->
+<div class="admin-card">
+    <h3 style="margin-top: 0; color: var(--accent);">Sales Summary</h3>
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Suburb</th>
+                <th>Cost Price</th>
+                <th>Sell Price</th>
+                <th>Profit</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.customer_name }}</td>
+                <td>{{ order.email }}</td>
+                <td>{{ order.phone }}</td>
+                <td>{{ order.suburb }}</td>
+
+                <td>${{ order.cost_price }}</td>
+                <td>${{ order.sell_price }}</td>
+
+                <!-- Profit highlight -->
+                <td style="color: var(--accent); font-weight: bold;">
+                    ${{ order.sell_price - order.cost_price }}
+                </td>
+
+                <td>{{ order.date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}

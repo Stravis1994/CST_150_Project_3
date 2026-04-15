@@ -1,1 +1,29 @@
-<!-- Success Page - Order Confirmed - Receipt sent -->
+{% extends "base.html" %}
+
+{% block title %}Order Complete{% endblock %}
+
+{% block content %}
+
+<!-- Order confirmation card -->
+<div class="success-card">
+
+    <!-- Success heading -->
+    <h2>Thank You!</h2>
+    <p>Your order has been successfully completed.</p>
+
+    <!-- Visual confirmation icon -->
+    <div class="success-icon">✔</div>
+
+    <!-- Email confirmation note -->
+    <p class="success-subtext">
+        A confirmation email has been sent to you.
+    </p>
+
+    <!-- Return to homepage -->
+    <a href="{{ url_for('index') }}" class="btn btn-primary success-btn">
+        Return to Home
+    </a>
+
+</div>
+
+{% endblock %}

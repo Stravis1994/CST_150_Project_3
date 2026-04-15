@@ -1,1 +1,75 @@
-<!-- Cart Page - Displays items in the shopping cart -->
+{% extends "base.html" %}
+
+{% block title %}Your Cart{% endblock %}
+
+{% block content %}
+
+<!-- Cart page heading -->
+<h2 class="page-heading">Your Cart</h2>
+
+{% if cart_items|length == 0 %}
+    <!-- Empty cart message -->
+    <p>Your cart is empty.</p>
+{% else %}
+
+<!-- Cart items table -->
+<table class="cart-table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in cart_items %}
+        <tr>
+
+            <!-- Product image + title -->
+            <td class="cart-product">
+                <img src="{{ url_for('static', filename='images/products/' + item.image) }}" alt="{{ item.title }}">
+                <span>{{ item.title }}</span>
+            </td>
+
+            <!-- Quantity controls -->
+            <td class="cart-qty">
+                <form action="{{ url_for('update_cart', product_id=item.id) }}" method="POST" class="qty-form">
+                    <button name="action" value="decrease" class="qty-btn">−</button>
+                    <span class="qty-number">{{ item.quantity }}</span>
+                    <button name="action" value="increase" class="qty-btn">+</button>
+                </form>
+            </td>
+
+            <!-- Unit price -->
+            <td>${{ item.price }}</td>
+
+            <!-- Line total -->
+            <td>${{ item.price * item.quantity }}</td>
+
+            <!-- Remove item -->
+            <td>
+                <form action="{{ url_for('remove_from_cart', product_id=item.id) }}" method="POST">
+                    <button class="remove-btn">Remove</button>
+                </form>
+            </td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Cart summary + checkout -->
+<div class="cart-summary">
+    <h3>Subtotal: <span>${{ subtotal }}</span></h3>
+
+    <a href="{{ url_for('checkout') }}" class="btn btn-primary checkout-btn">
+        Proceed to Checkout
+    </a>
+</div>
+
+{% endif %}
+
+{% endblock %}

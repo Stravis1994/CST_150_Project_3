@@ -1,7 +1,40 @@
 {% extends "admin-base.html" %}
 
-{% block head %}{% endblock %}
+{% block title %}Inventory{% endblock %}
+{% block page_title %}Inventory{% endblock %}
 
-{% block body %}
+{% block content %}
+
+<!-- Product inventory table -->
+<div class="admin-card">
+    <h3 style="margin-top: 0; color: var(--accent);">Product Inventory</h3>
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Cost Price</th>
+                <th>Sell Price</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>
+                    <img src="{{ url_for('static', filename='images/products/' + product.image) }}"
+                         alt="{{ product.title }}"
+                         class="inventory-img">
+                </td>
+
+                <td>{{ product.title }}</td>
+                <td>${{ product.cost_price }}</td>
+                <td>${{ product.sell_price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}
