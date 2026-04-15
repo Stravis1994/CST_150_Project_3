@@ -1,1 +1,0 @@
-// cart - manages cart interactions, updates cart display and handles checkout process

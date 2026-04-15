@@ -1,1 +1,0 @@
-// API routes for shop functionality - endpoints for products, cart and checkout operations
