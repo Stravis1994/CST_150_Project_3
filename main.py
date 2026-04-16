@@ -89,19 +89,19 @@ def complete_order():
 
 @app.route('/admin')
 def admin_dashboard():
-    return "Admin Dashboard Placeholder"
+    return render_template('admin-dashboard.html')
 
 @app.route('/admin/inventory')
 def admin_inventory():
-    return "Admin Inventory Placeholder"
+    return render_template('admin-inventory.html')
 
 @app.route('/admin/orders')
 def admin_orders():
-    return "Admin Orders Placeholder"
+    return render_template('admin-orders.html')
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
-    return "Admin Login Placeholder"
+    return render_template('admin-login.html')
 
 @app.route('/admin/logout')
 def admin_logout():
