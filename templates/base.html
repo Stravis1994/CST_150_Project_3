@@ -1,18 +1,56 @@
-<!-- Base Template - Common structure for all pages -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Document{% endblock %}</title>
+    <meta-name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Shop{% endblock %}</title>
+
+    <!-- Main customer stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    {% block head %}{% endblock %}
 </head>
 
 <body>
-    {% block body %}{% endblock %}
-    <script src="{{ url_for('static', filename='source/scripts.js') }}"></script>
-</body>
 
+    <!-- HEADER -->
+    <!-- Primary site navigation -->
+    <header class="header">
+        <div class="container nav-container">
+            <h1 class="logo">TCG Card Shop</h1>
+
+            <nav class="nav">
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('products') }}">Products</a>
+                <a href="{{ url_for('cart') }}" class="cart-link">
+                    Cart <span class="cart-badge">{{ cart_count }}</span>
+                </a>
+            </nav>
+
+            <!-- Mobile menu toggle -->
+            <button class="hamburger" id="hamburgerBtn">☰</button>
+        </div>
+    </header>
+
+    <!-- MOBILE NAV -->
+    <!-- Collapsible navigation for small screens -->
+    <nav class="mobile-nav" id="mobileNav">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('products') }}">Products</a>
+        <a href="{{ url_for('cart') }}">Cart</a>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <!-- Dynamic page content -->
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <!-- Simple site footer -->
+    <footer class="footer">
+        <p>© 2026 TCG Card Shop</p>
+    </footer>
+
+    <!-- Mobile nav script -->
+    <script src="{{ url_for('static', filename='scripts/scripts.js') }}"></script>
+</body>
 </html>

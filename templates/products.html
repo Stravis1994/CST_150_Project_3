@@ -1,1 +1,35 @@
-<!-- Products Page - Catalogue - displays products -->
+{% extends "base.html" %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+
+<!-- Products page heading -->
+<h2 class="page-heading">Our Products</h2>
+
+<!-- Responsive product grid -->
+<div class="products-grid">
+
+    {% for product in products %}
+    <div class="product-card">
+
+        <!-- Product image -->
+        <img src="{{ url_for('static', filename='images/products/' + product.image) }}"
+             alt="{{ product.title }}">
+
+        <!-- Product details + add-to-cart -->
+        <div class="product-info">
+            <h3>{{ product.title }}</h3>
+            <p class="product-price">${{ product.sell_price }}</p>
+
+            <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST">
+                <button class="btn btn-primary product-btn">Add to Cart</button>
+            </form>
+        </div>
+
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

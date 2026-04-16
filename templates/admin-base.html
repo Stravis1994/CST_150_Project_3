@@ -1,16 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    {{ url_for('static', filename='css/admin-styles.css') }}
-    {% block head %}{% endblock %}
+    <title>{% block title %}Admin{% endblock %}</title>
+
+    <!-- Admin stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-styles.css') }}">
 </head>
 
 <body>
-    {% block body %}{% endblock %}
-</body>
 
+    <!-- SIDEBAR -->
+    <!-- Admin navigation panel -->
+    <aside class="sidebar">
+        <h2 class="sidebar-logo">Admin</h2>
+
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('admin_dashboard') }}" class="nav-item {% if active=='dashboard' %}active{% endif %}">Dashboard</a>
+            <a href="{{ url_for('admin_inventory') }}" class="nav-item {% if active=='inventory' %}active{% endif %}">Inventory</a>
+            <a href="{{ url_for('admin_orders') }}" class="nav-item {% if active=='orders' %}active{% endif %}">Orders</a>
+            <a href="{{ url_for('admin_logout') }}" class="nav-item logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <!-- Content area beside sidebar -->
+    <div class="main">
+
+        <!-- TOP BAR -->
+        <!-- Page title container -->
+        <header class="topbar">
+            <h1 class="page-title">{% block page_title %}{% endblock %}</h1>
+        </header>
+
+        <!-- PAGE CONTENT -->
+        <!-- Dynamic admin page content -->
+        <main class="content">
+            {% block content %}{% endblock %}
+        </main>
+
+    </div>
+
+</body>
 </html>

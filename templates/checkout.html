@@ -1,1 +1,34 @@
-<!-- Checkout Page - Form for entering shipping and payment information -->
+{% extends "base.html" %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+
+<!-- Checkout page heading -->
+<h2 class="page-heading">Checkout</h2>
+
+<!-- Checkout form container -->
+<div class="checkout-card">
+
+    <!-- Customer delivery + contact details -->
+    <form action="{{ url_for('complete_order') }}" method="POST" class="checkout-form">
+
+        <label>Email Address</label>
+        <input type="email" name="email" required>
+
+        <label>Phone Number</label>
+        <input type="tel" name="phone" required>
+
+        <label>Suburb</label>
+        <input type="text" name="suburb" required>
+
+        <!-- Submit order -->
+        <button type="submit" class="btn btn-primary checkout-submit">
+            Complete Purchase
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

@@ -1,7 +1,41 @@
-{% extends "admin-base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    
+    <!-- Admin stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-styles.css') }}">
+</head>
 
-{% block head %}{% endblock %}
+<body class="login-body">
 
-{% block body %}
+    <!-- Login wrapper -->
+    <div class="login-wrapper">
+        <div class="login-card">
 
-{% endblock %}
+            <!-- Login heading -->
+            <h2 class="login-title">Admin Login</h2>
+
+            <!-- Error message (if login fails) -->
+            {% if error %}
+                <p class="login-error">{{ error }}</p>
+            {% endif %}
+
+            <!-- Login form -->
+            <form method="POST" action="{{ url_for('admin_login') }}">
+                <label>Email</label>
+                <input type="email" name="email" required>
+
+                <label>Password</label>
+                <input type="password" name="password" required>
+
+                <button type="submit" class="btn btn-primary login-btn">Login</button>
+            </form>
+
+        </div>
+    </div>
+
+</body>
+</html>
