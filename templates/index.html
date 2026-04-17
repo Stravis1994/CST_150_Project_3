@@ -17,4 +17,39 @@
     </div>
 </section>
 
+<section class="feature-banner" aria-label="Featured products">
+    <div class="feature-banner-header">
+        <h2>Featured Cards</h2>
+        <p>Popular picks moving across the shop.</p>
+    </div>
+
+    <div class="feature-rail">
+        <div class="feature-track">
+            <div class="feature-group">
+                {% for product in featured_products %}
+                <article class="feature-card">
+                    <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.title }}">
+                    <div class="feature-card-info">
+                        <h3>{{ product.title }}</h3>
+                        <p>${{ '%.2f'|format(product.price) }}</p>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <div class="feature-group" aria-hidden="true">
+                {% for product in featured_products %}
+                <article class="feature-card">
+                    <img src="{{ url_for('static', filename=product.image_path) }}" alt="">
+                    <div class="feature-card-info">
+                        <h3>{{ product.title }}</h3>
+                        <p>${{ '%.2f'|format(product.price) }}</p>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
 {% endblock %}

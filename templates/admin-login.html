@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
-    
+
     <!-- Admin stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-styles.css') }}">
 </head>
@@ -20,13 +21,13 @@
 
             <!-- Error message (if login fails) -->
             {% if error %}
-                <p class="login-error">{{ error }}</p>
+            <p class="login-error">{{ error }}</p>
             {% endif %}
 
             <!-- Login form -->
             <form method="POST" action="{{ url_for('admin_login') }}">
-                <label>Email</label>
-                <input type="email" name="email" required>
+                <label>Username</label>
+                <input type="text" name="email" required>
 
                 <label>Password</label>
                 <input type="password" name="password" required>
@@ -38,4 +39,5 @@
     </div>
 
 </body>
+
 </html>

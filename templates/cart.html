@@ -8,8 +8,8 @@
 <h2 class="page-heading">Your Cart</h2>
 
 {% if cart_items|length == 0 %}
-    <!-- Empty cart message -->
-    <p>Your cart is empty.</p>
+<!-- Empty cart message -->
+<p>Your cart is empty.</p>
 {% else %}
 
 <!-- Cart items table -->
@@ -44,10 +44,10 @@
             </td>
 
             <!-- Unit price -->
-            <td>${{ item.price }}</td>
+            <td>${{ '%.2f'|format(item.price) }}</td>
 
             <!-- Line total -->
-            <td>${{ item.price * item.quantity }}</td>
+            <td>${{ '%.2f'|format(item.line_total) }}</td>
 
             <!-- Remove item -->
             <td>
@@ -63,7 +63,7 @@
 
 <!-- Cart summary + checkout -->
 <div class="cart-summary">
-    <h3>Subtotal: <span>${{ subtotal }}</span></h3>
+    <h3>Subtotal: <span>${{ '%.2f'|format(subtotal) }}</span></h3>
 
     <a href="{{ url_for('checkout') }}" class="btn btn-primary checkout-btn">
         Proceed to Checkout

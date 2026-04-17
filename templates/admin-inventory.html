@@ -9,13 +9,25 @@
 <div class="admin-card">
     <h3 style="margin-top: 0; color: var(--accent);">Product Inventory</h3>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div style="margin-bottom: 1rem; display: grid; gap: 0.5rem;">
+        {% for category, message in messages %}
+        <div class="inventory-flash inventory-flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
     <table class="admin-table">
         <thead>
             <tr>
                 <th>Image</th>
                 <th>Title</th>
+                <th>Quantity</th>
                 <th>Cost Price</th>
                 <th>Sell Price</th>
+                <th>Add Stock</th>
             </tr>
         </thead>
 
@@ -24,13 +36,24 @@
             <tr>
                 <td>
                     <img src="{{ url_for('static', filename='images/products/' + product.image) }}"
-                         alt="{{ product.title }}"
-                         class="inventory-img">
+                        alt="{{ product.title }}" class="inventory-img">
                 </td>
 
                 <td>{{ product.title }}</td>
+                <td>{{ product.quantity }}</td>
                 <td>${{ product.cost_price }}</td>
                 <td>${{ product.sell_price }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin_add_stock', product_id=product.id) }}"
+                        class="stock-form">
+                        <input type="number" name="stock_to_add" min="1" step="1" value="1" required>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No products found in inventory.</td>
             </tr>
             {% endfor %}
         </tbody>

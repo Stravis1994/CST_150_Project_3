@@ -7,22 +7,51 @@
 <!-- Products page heading -->
 <h2 class="page-heading">Our Products</h2>
 
+<form class="products-toolbar" method="GET" action="{{ url_for('products') }}">
+    <div class="products-toolbar-group">
+        <label for="gameFilter">Game</label>
+        <select id="gameFilter" name="game">
+            <option value="">All games</option>
+            {% for game in games %}
+            <option value="{{ game }}" {% if game==selected_game %}selected{% endif %}>{{ game }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="products-toolbar-group">
+        <label for="sortFilter">Sort</label>
+        <select id="sortFilter" name="sort">
+            <option value="title" {% if sort_option=='title' %}selected{% endif %}>Title A-Z</option>
+            <option value="price_asc" {% if sort_option=='price_asc' %}selected{% endif %}>Price: Low to High</option>
+            <option value="price_desc" {% if sort_option=='price_desc' %}selected{% endif %}>Price: High to Low</option>
+            <option value="rarity_asc" {% if sort_option=='rarity_asc' %}selected{% endif %}>Rarity: A-Z</option>
+            <option value="rarity_desc" {% if sort_option=='rarity_desc' %}selected{% endif %}>Rarity: Z-A</option>
+        </select>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Apply</button>
+</form>
+
 <!-- Responsive product grid -->
 <div class="products-grid">
 
     {% for product in products %}
-    <div class="product-card">
+    <div class="product-card product-card-clickable" role="button" tabindex="0"
+        aria-label="View details for {{ product.title }}" data-title="{{ product.title }}"
+        data-game="{{ product.game }}" data-rarity="{{ product.rarity }}" data-price="{{ product.sell_price }}"
+        data-image-url="{{ url_for('static', filename=product.image_path) }}"
+        data-add-to-cart-url="{{ url_for('add_to_cart', product_id=product.id) }}">
 
         <!-- Product image -->
-        <img src="{{ url_for('static', filename='images/products/' + product.image) }}"
-             alt="{{ product.title }}">
+        <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.title }}">
 
         <!-- Product details + add-to-cart -->
         <div class="product-info">
             <h3>{{ product.title }}</h3>
+            <p class="product-meta">{{ product.game }} · {{ product.rarity }}</p>
             <p class="product-price">${{ product.sell_price }}</p>
 
-            <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST">
+            <form class="product-card-form" action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST">
                 <button class="btn btn-primary product-btn">Add to Cart</button>
             </form>
         </div>
@@ -30,6 +59,34 @@
     </div>
     {% endfor %}
 
+    {% if products|length == 0 %}
+    <p class="products-empty">No products match the selected filters.</p>
+    {% endif %}
+
+</div>
+
+<div class="product-modal" id="productModal" aria-hidden="true">
+    <div class="product-modal-backdrop" data-close-modal></div>
+
+    <div class="product-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
+        <button class="product-modal-close" type="button" aria-label="Close product details" data-close-modal>×</button>
+
+        <div class="product-modal-content">
+            <div class="product-modal-image-wrap">
+                <img id="productModalImage" src="" alt="">
+            </div>
+
+            <div class="product-modal-info">
+                <p class="product-modal-kicker" id="productModalMeta"></p>
+                <h3 id="productModalTitle"></h3>
+                <p class="product-price product-modal-price" id="productModalPrice"></p>
+
+                <form id="productModalForm" method="POST">
+                    <button class="btn btn-primary product-btn" type="submit">Add to Cart</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

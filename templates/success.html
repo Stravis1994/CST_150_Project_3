@@ -14,6 +14,18 @@
     <!-- Visual confirmation icon -->
     <div class="success-icon">✔</div>
 
+    {% if order_details %}
+    <div class="success-details">
+        <p><strong>Order #:</strong> {{ order_details.order_id }}</p>
+        <p><strong>Name:</strong> {{ order_details.first_name }} {{ order_details.last_name }}</p>
+        <p><strong>Email:</strong> {{ order_details.email }}</p>
+        <p><strong>Phone:</strong> {{ order_details.phone }}</p>
+        <p><strong>Address:</strong> {{ order_details.address }}</p>
+        <p><strong>Items:</strong> {{ order_details.item_count }}</p>
+        <p><strong>Subtotal:</strong> ${{ '%.2f'|format(order_details.subtotal) }}</p>
+    </div>
+    {% endif %}
+
     <!-- Email confirmation note -->
     <p class="success-subtext">
         A confirmation email has been sent to you.
