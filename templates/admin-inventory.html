@@ -23,10 +23,34 @@
         <thead>
             <tr>
                 <th>Image</th>
-                <th>Title</th>
-                <th>Quantity</th>
-                <th>Cost Price</th>
-                <th>Sell Price</th>
+                <th>
+                    <a class="sort-link"
+                        href="{{ url_for('admin_inventory', sort='title', dir='desc' if current_sort == 'title' and current_dir == 'asc' else 'asc') }}">
+                        Title{% if current_sort == 'title' %}<span class="sort-indicator">{% if current_dir == 'asc'
+                            %}&uarr;{% else %}&darr;{% endif %}</span>{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link"
+                        href="{{ url_for('admin_inventory', sort='quantity', dir='desc' if current_sort == 'quantity' and current_dir == 'asc' else 'asc') }}">
+                        Quantity{% if current_sort == 'quantity' %}<span class="sort-indicator">{% if current_dir ==
+                            'asc' %}&uarr;{% else %}&darr;{% endif %}</span>{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link"
+                        href="{{ url_for('admin_inventory', sort='cost_price', dir='desc' if current_sort == 'cost_price' and current_dir == 'asc' else 'asc') }}">
+                        Cost Price{% if current_sort == 'cost_price' %}<span class="sort-indicator">{% if current_dir ==
+                            'asc' %}&uarr;{% else %}&darr;{% endif %}</span>{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link"
+                        href="{{ url_for('admin_inventory', sort='sell_price', dir='desc' if current_sort == 'sell_price' and current_dir == 'asc' else 'asc') }}">
+                        Sell Price{% if current_sort == 'sell_price' %}<span class="sort-indicator">{% if current_dir ==
+                            'asc' %}&uarr;{% else %}&darr;{% endif %}</span>{% endif %}
+                    </a>
+                </th>
                 <th>Add Stock</th>
             </tr>
         </thead>
@@ -47,6 +71,8 @@
                     <form method="POST" action="{{ url_for('admin_add_stock', product_id=product.id) }}"
                         class="stock-form">
                         <input type="number" name="stock_to_add" min="1" step="1" value="1" required>
+                        <input type="hidden" name="sort" value="{{ current_sort }}">
+                        <input type="hidden" name="dir" value="{{ current_dir }}">
                         <button type="submit" class="btn btn-primary">Add</button>
                     </form>
                 </td>

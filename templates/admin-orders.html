@@ -12,34 +12,90 @@
     <table class="admin-table">
         <thead>
             <tr>
-                <th>Customer</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Suburb</th>
-                <th>Cost Price</th>
-                <th>Sell Price</th>
-                <th>Profit</th>
-                <th>Date</th>
+                <th>
+                    <a class="sort-link"
+                        href="{{ url_for('admin_orders', sort='customer', dir='desc' if current_sort == 'customer' and current_dir == 'asc' else 'asc') }}">
+                        Customer{% if current_sort == 'customer' %}<span class="sort-indicator">{% if current_dir ==
+                            'asc' %}&uarr;{% else %}&darr;{% endif %}</span>{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link"
+                        href="{{ url_for('admin_orders', sort='email', dir='desc' if current_sort == 'email' and current_dir == 'asc' else 'asc') }}">
+                        Email{% if current_sort == 'email' %}<span class="sort-indicator">{% if current_dir == 'asc'
+                            %}&uarr;{% else %}&darr;{% endif %}</span>{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link"
+                        href="{{ url_for('admin_orders', sort='phone', dir='desc' if current_sort == 'phone' and current_dir == 'asc' else 'asc') }}">
+                        Phone{% if current_sort == 'phone' %}<span class="sort-indicator">{% if current_dir == 'asc'
+                            %}&uarr;{% else %}&darr;{% endif %}</span>{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link"
+                        href="{{ url_for('admin_orders', sort='address', dir='desc' if current_sort == 'address' and current_dir == 'asc' else 'asc') }}">
+                        Address{% if current_sort == 'address' %}<span class="sort-indicator">{% if current_dir == 'asc'
+                            %}&uarr;{% else %}&darr;{% endif %}</span>{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link"
+                        href="{{ url_for('admin_orders', sort='cost_price', dir='desc' if current_sort == 'cost_price' and current_dir == 'asc' else 'asc') }}">
+                        Cost Price{% if current_sort == 'cost_price' %}<span class="sort-indicator">{% if current_dir ==
+                            'asc' %}&uarr;{% else %}&darr;{% endif %}</span>{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link"
+                        href="{{ url_for('admin_orders', sort='sell_price', dir='desc' if current_sort == 'sell_price' and current_dir == 'asc' else 'asc') }}">
+                        Sell Price{% if current_sort == 'sell_price' %}<span class="sort-indicator">{% if current_dir ==
+                            'asc' %}&uarr;{% else %}&darr;{% endif %}</span>{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link"
+                        href="{{ url_for('admin_orders', sort='profit', dir='desc' if current_sort == 'profit' and current_dir == 'asc' else 'asc') }}">
+                        Profit{% if current_sort == 'profit' %}<span class="sort-indicator">{% if current_dir == 'asc'
+                            %}&uarr;{% else %}&darr;{% endif %}</span>{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a class="sort-link"
+                        href="{{ url_for('admin_orders', sort='date', dir='desc' if current_sort == 'date' and current_dir == 'asc' else 'asc') }}">
+                        Date{% if current_sort == 'date' %}<span class="sort-indicator">{% if current_dir == 'asc'
+                            %}&uarr;{% else %}&darr;{% endif %}</span>{% endif %}
+                    </a>
+                </th>
             </tr>
         </thead>
 
         <tbody>
             {% for order in orders %}
-            <tr>
-                <td>{{ order.customer_name }}</td>
+            <tr class="order-row-clickable"
+                onclick="window.location='{{ url_for('admin_order_details', order_id=order.order_id) }}'">
+                <td>
+                    {{ order.customer_name }}
+                    <div class="order-row-hint">View order #{{ order.order_id }}</div>
+                </td>
                 <td>{{ order.email }}</td>
                 <td>{{ order.phone }}</td>
-                <td>{{ order.suburb }}</td>
+                <td>{{ order.address }}</td>
 
                 <td>${{ order.cost_price }}</td>
                 <td>${{ order.sell_price }}</td>
 
                 <!-- Profit highlight -->
                 <td style="color: var(--accent); font-weight: bold;">
-                    ${{ order.sell_price - order.cost_price }}
+                    ${{ order.profit }}
                 </td>
 
                 <td>{{ order.date }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8">No completed orders yet.</td>
             </tr>
             {% endfor %}
         </tbody>

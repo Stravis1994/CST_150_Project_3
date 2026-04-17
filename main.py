@@ -275,11 +275,20 @@ def get_admin_dashboard_data():
     }
 
 
-def get_admin_inventory_products():
+def get_admin_inventory_products(sort_by='title', sort_dir='asc'):
+    sort_columns = {
+        'title': 'Products.title',
+        'quantity': 'quantity',
+        'cost_price': 'Products.cost_price',
+        'sell_price': 'Products.selling_price',
+    }
+    order_column = sort_columns.get(sort_by, 'Products.title')
+    order_direction = 'DESC' if str(sort_dir).lower() == 'desc' else 'ASC'
+
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
     cursor.execute(
-        '''
+        f'''
         SELECT Products.ProductID,
                Products.title,
                Products.cost_price,
@@ -289,7 +298,7 @@ def get_admin_inventory_products():
         FROM Products
         LEFT JOIN Inventory ON Inventory.ProductID = Products.ProductID
         GROUP BY Products.ProductID, Products.title, Products.cost_price, Products.selling_price, Products.image_url
-        ORDER BY Products.title ASC
+        ORDER BY {order_column} {order_direction}, Products.title ASC
         '''
     )
     product_rows = cursor.fetchall()
@@ -311,6 +320,153 @@ def get_admin_inventory_products():
         })
 
     return products
+
+
+def get_admin_orders_summary(sort_by='date', sort_dir='desc'):
+    sort_columns = {
+        'customer': 'customer_name',
+        'email': 'Customers.email',
+        'phone': 'Customers.phone_number',
+        'address': 'Customers.address',
+        'cost_price': 'cost_total',
+        'sell_price': 'sell_total',
+        'profit': 'profit_total',
+        'date': 'Orders.order_date',
+    }
+    order_column = sort_columns.get(sort_by, 'Orders.order_date')
+    order_direction = 'ASC' if str(sort_dir).lower() == 'asc' else 'DESC'
+
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(
+        f'''
+        SELECT Orders.OrderID,
+               CONCAT(Customers.first_name, ' ', Customers.last_name) AS customer_name,
+               Customers.email,
+               Customers.phone_number,
+               Customers.address,
+               Orders.order_date,
+               COALESCE(SUM(Products.cost_price * OrderItems.quantity), 0) AS cost_total,
+               COALESCE(SUM(OrderItems.price * OrderItems.quantity), 0) AS sell_total,
+               COALESCE(SUM((OrderItems.price - Products.cost_price) * OrderItems.quantity), 0) AS profit_total
+        FROM Orders
+        INNER JOIN Customers ON Customers.CustomerID = Orders.CustomerID
+        INNER JOIN OrderItems ON OrderItems.OrderID = Orders.OrderID
+        INNER JOIN Products ON Products.ProductID = OrderItems.ProductID
+        GROUP BY Orders.OrderID, customer_name, Customers.email, Customers.phone_number, Customers.address, Orders.order_date
+        ORDER BY {order_column} {order_direction}, Orders.OrderID DESC
+        '''
+    )
+    order_rows = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    orders = []
+    for row in order_rows:
+        cost_total = float(row.get('cost_total', 0) or 0)
+        sell_total = float(row.get('sell_total', 0) or 0)
+        order_date = row.get('order_date')
+
+        orders.append({
+            'order_id': row.get('OrderID'),
+            'customer_name': row.get('customer_name', 'Unknown Customer'),
+            'email': row.get('email', ''),
+            'phone': row.get('phone_number', ''),
+            'address': row.get('address', ''),
+            'cost_price': f"{cost_total:.2f}",
+            'sell_price': f"{sell_total:.2f}",
+            'profit': f"{(sell_total - cost_total):.2f}",
+            'date': order_date.strftime('%Y-%m-%d %I:%M %p') if order_date else '',
+        })
+
+    return orders
+
+
+def get_admin_order_details(order_id):
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+
+    cursor.execute(
+        '''
+        SELECT Orders.OrderID,
+               Orders.order_date,
+               Orders.total_amount,
+               Customers.first_name,
+               Customers.last_name,
+               Customers.email,
+               Customers.phone_number,
+               Customers.address
+        FROM Orders
+        INNER JOIN Customers ON Customers.CustomerID = Orders.CustomerID
+        WHERE Orders.OrderID = %s
+        LIMIT 1
+        ''',
+        (order_id,)
+    )
+    order_row = cursor.fetchone()
+
+    if not order_row:
+        cursor.close()
+        connection.close()
+        return None
+
+    cursor.execute(
+        '''
+        SELECT Products.title,
+               OrderItems.quantity,
+               Products.cost_price,
+               OrderItems.price AS sell_price
+        FROM OrderItems
+        INNER JOIN Products ON Products.ProductID = OrderItems.ProductID
+        WHERE OrderItems.OrderID = %s
+        ORDER BY Products.title ASC
+        ''',
+        (order_id,)
+    )
+    item_rows = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    items = []
+    cost_total = 0.0
+    sell_total = 0.0
+
+    for row in item_rows:
+        quantity = int(row.get('quantity', 0) or 0)
+        unit_cost = float(row.get('cost_price', 0) or 0)
+        unit_sell = float(row.get('sell_price', 0) or 0)
+        line_cost = unit_cost * quantity
+        line_sell = unit_sell * quantity
+
+        cost_total += line_cost
+        sell_total += line_sell
+
+        items.append({
+            'title': row.get('title', 'Unknown Item'),
+            'quantity': quantity,
+            'unit_cost': f"{unit_cost:.2f}",
+            'unit_sell': f"{unit_sell:.2f}",
+            'line_cost': f"{line_cost:.2f}",
+            'line_sell': f"{line_sell:.2f}",
+        })
+
+    order_date = order_row.get('order_date')
+    item_count = sum(item['quantity'] for item in items)
+
+    return {
+        'order_id': order_row['OrderID'],
+        'customer_name': f"{order_row.get('first_name', '').strip()} {order_row.get('last_name', '').strip()}".strip(),
+        'email': order_row.get('email', ''),
+        'phone': order_row.get('phone_number', ''),
+        'address': order_row.get('address', ''),
+        'date': order_date.strftime('%Y-%m-%d %I:%M %p') if order_date else '',
+        'total_amount': f"{float(order_row.get('total_amount', 0) or 0):.2f}",
+        'cost_total': f"{cost_total:.2f}",
+        'sell_total': f"{sell_total:.2f}",
+        'profit_total': f"{(sell_total - cost_total):.2f}",
+        'item_count': item_count,
+        'order_items': items,
+    }
 
 
 # ------------------------------
@@ -570,8 +726,19 @@ def admin_inventory():
     if not session.get('admin_user_id'):
         return redirect(url_for('admin_login'))
 
-    products = get_admin_inventory_products()
-    return render_template('admin-inventory.html', products=products, active='inventory')
+    sort_by = request.args.get('sort', 'title').strip()
+    sort_dir = request.args.get('dir', 'asc').strip().lower()
+    if sort_dir not in ('asc', 'desc'):
+        sort_dir = 'asc'
+
+    products = get_admin_inventory_products(sort_by=sort_by, sort_dir=sort_dir)
+    return render_template(
+        'admin-inventory.html',
+        products=products,
+        active='inventory',
+        current_sort=sort_by,
+        current_dir=sort_dir,
+    )
 
 
 @app.route('/admin/inventory/add-stock/<int:product_id>', methods=['POST'])
@@ -580,16 +747,20 @@ def admin_add_stock(product_id):
         return redirect(url_for('admin_login'))
 
     stock_to_add_raw = request.form.get('stock_to_add', '').strip()
+    current_sort = request.form.get('sort', 'title').strip()
+    current_dir = request.form.get('dir', 'asc').strip().lower()
+    if current_dir not in ('asc', 'desc'):
+        current_dir = 'asc'
 
     try:
         stock_to_add = int(stock_to_add_raw)
     except ValueError:
         flash('Please enter a valid whole number for stock.', 'error')
-        return redirect(url_for('admin_inventory'))
+        return redirect(url_for('admin_inventory', sort=current_sort, dir=current_dir))
 
     if stock_to_add <= 0:
         flash('Stock to add must be greater than 0.', 'error')
-        return redirect(url_for('admin_inventory'))
+        return redirect(url_for('admin_inventory', sort=current_sort, dir=current_dir))
 
     connection = get_db_connection()
 
@@ -603,7 +774,7 @@ def admin_add_stock(product_id):
 
         if not product:
             flash('Product not found.', 'error')
-            return redirect(url_for('admin_inventory'))
+            return redirect(url_for('admin_inventory', sort=current_sort, dir=current_dir))
 
         cursor.execute(
             'UPDATE Inventory SET quantity = quantity + %s WHERE ProductID = %s',
@@ -626,13 +797,39 @@ def admin_add_stock(product_id):
     finally:
         connection.close()
 
-    return redirect(url_for('admin_inventory'))
+    return redirect(url_for('admin_inventory', sort=current_sort, dir=current_dir))
 
 @app.route('/admin/orders')
 def admin_orders():
     if not session.get('admin_user_id'):
         return redirect(url_for('admin_login'))
-    return render_template('admin-orders.html', active='orders')
+
+    sort_by = request.args.get('sort', 'date').strip()
+    sort_dir = request.args.get('dir', 'desc').strip().lower()
+    if sort_dir not in ('asc', 'desc'):
+        sort_dir = 'desc'
+
+    orders = get_admin_orders_summary(sort_by=sort_by, sort_dir=sort_dir)
+    return render_template(
+        'admin-orders.html',
+        orders=orders,
+        active='orders',
+        current_sort=sort_by,
+        current_dir=sort_dir,
+    )
+
+
+@app.route('/admin/orders/<int:order_id>')
+def admin_order_details(order_id):
+    if not session.get('admin_user_id'):
+        return redirect(url_for('admin_login'))
+
+    order = get_admin_order_details(order_id)
+    if not order:
+        flash('Order not found.', 'error')
+        return redirect(url_for('admin_orders'))
+
+    return render_template('admin-order-details.html', order=order, active='orders')
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():

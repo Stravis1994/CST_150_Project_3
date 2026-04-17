@@ -180,6 +180,20 @@ body {
   color: var(--accent);
 }
 
+.sort-link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.sort-link:hover {
+  text-decoration: underline;
+}
+
+.sort-indicator {
+  margin-left: 0.35rem;
+  font-size: 0.85rem;
+}
+
 /* Table cell spacing */
 .admin-table td {
   padding: 1rem;
@@ -410,4 +424,37 @@ body {
 .admin-table td.profit {
   color: var(--accent);
   font-weight: bold;
+}
+
+/* Orders page clickable summary rows */
+.order-row-clickable {
+  cursor: pointer;
+}
+
+.order-row-hint {
+  margin-top: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* Order details page layout */
+.order-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.order-details-grid p {
+  margin: 0.5rem 0;
+}
+
+.order-profit {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+@media (max-width: 900px) {
+  .order-details-grid {
+    grid-template-columns: 1fr;
+  }
 }
