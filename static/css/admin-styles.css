@@ -50,7 +50,14 @@ body {
   font-family: Arial, sans-serif;
   background: var(--bg-dark);
   color: var(--text-light);
-  display: flex;
+  display: block;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
 }
 
 
@@ -66,6 +73,8 @@ body {
   position: fixed;
   top: 0;
   left: 0;
+  bottom: 0;
+  box-sizing: border-box;
   box-shadow: var(--shadow);
 }
 
@@ -116,6 +125,7 @@ body {
 .main {
   margin-left: 240px;
   width: calc(100% - 240px);
+  min-width: 0;
   min-height: 100vh;
 }
 
@@ -124,12 +134,18 @@ body {
   padding: 1.5rem;
   border-bottom: 1px solid var(--border-soft);
   background: #0f0f0f;
+  overflow: hidden;
 }
 
 /* Page title styling */
 .page-title {
   margin: 0;
   font-size: 1.8rem;
+  max-width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Standard content padding */
@@ -341,6 +357,8 @@ body {
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .stock-form input {
@@ -350,6 +368,10 @@ body {
   border: 1px solid var(--border-soft);
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-light);
+}
+
+.stock-cell {
+  text-align: center;
 }
 
 /* Inventory page flash messages */
