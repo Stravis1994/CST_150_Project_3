@@ -1,6 +1,8 @@
+-- Seed product catalog data for the storefront.
 -- Active: 1775526151868@@127.0.0.1@3306@tcg_store
+-- Insert all starter products for each supported card game.
 INSERT INTO Products (game, title, type, rarity, cost_price, selling_price, image_url) VALUES
-#---[MTG Cards]---#
+-- Magic: The Gathering products.
 ("Magic: The Gathering", "Blightsteel Colossus", "Artifact Creature", "Foil Full-Art", 82.40, 103.00, "static/images/products/blightsteel-colossus.jpg"),
 ("Magic: The Gathering", "Mox Opal", "Artifact", "Non-Foil", 240.00, 300.00, "static/images/products/mox-opal.jpg"),
 ("Magic: The Gathering", "Force of Will", "instant", "Non-Foil Retro Border", 80.00, 100.00, "static/images/products/force-of-will.jpg"),
@@ -11,7 +13,7 @@ INSERT INTO Products (game, title, type, rarity, cost_price, selling_price, imag
 ("Magic: The Gathering", "Ephemerate", "Instant", "Etched Foil Mystical Archive (EN)", 19.20, 24.00, "static/images/products/ephemerate.jpg"),
 ("Magic: The Gathering", "Jace, the Mind Sculptor", "Legendary Planeswalker", "Non-Foil", 20.00, 25.00, "static/images/products/jace-the-mind-sculptor.jpg"),
 ("Magic: The Gathering", "Land Tax", "Enchantment", "Non-Foil", 33.60, 42.00, "static/images/products/land-tax.jpg"),
-#---[YGO Cards]---#
+-- Yu-Gi-Oh! products.
 ("Yu-Gi-Oh!", "Firewall Dragon Singularity", "Link Monster", "Overframe Starlight Rare", 200, 240.00, "static/images/products/FirewallDragonSigularity_Overframe.png"),
 ("Yu-Gi-Oh!", "Fiendsmith's Lacrima", "Fusion Monster", "Starlight Rare", 40.00, 50.00, "static/images/products/FiendsmithsLacrima.png"),
 ("Yu-Gi-Oh!", "D/D/D Marksman King Tell", "XYZ Monster", "Starlight Rare", 8.00, 10.000, "static/images/products/DDDMarksmanKingTell.png"),

@@ -1,4 +1,6 @@
+-- Seed inventory quantities for existing products.
 -- Active: 1775526151868@@127.0.0.1@3306@tcg_store
+-- Quantities map to ProductID values inserted in Products.sql.
 INSERT INTO Inventory (ProductID, quantity) VALUES (1, 10), (2, 5), (3, 15), (4, 8), (5, 12), (6, 20), (7, 7), (8, 9), (9, 14), (10, 11),
 (11, 6), (12, 18), (13, 4), (14, 3), (15, 10), (16, 5), (17, 8), (18, 12), (19, 9), (20, 7),
 (21, 15), (22, 10), (23, 6), (24, 4), (25, 8), (26, 10), (27, 10), (28, 10), (29, 10), (30, 10),

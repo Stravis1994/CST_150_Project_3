@@ -1,3 +1,4 @@
+# Core Flask application for the TCG Store storefront and admin panel.
 from flask import Flask, render_template, url_for, request, jsonify, redirect, flash, session
 from flask_sqlalchemy import SQLAlchemy
 import mysql.connector
@@ -12,7 +13,7 @@ app.config['SECRET_KEY'] = 'dev-secret-key'
 db = SQLAlchemy(app)
 
 
-# MySQL connection for admin data
+# Create a MySQL connection used by storefront and admin queries.
 def get_db_connection():
     return mysql.connector.connect(
         host="localhost",
@@ -22,18 +23,19 @@ def get_db_connection():
     )
 
 
-# Password hashing helper
+# Hash plaintext passwords with Argon2.
 def hash_password(password):
     ph = PasswordHasher()
     return ph.hash(password)
 
 
-# Placeholder cart count until cart logic is implemented
+# Return the total quantity of items currently in the session cart.
 def get_cart_count():
     cart = session.get('cart', {})
     return sum(cart.values())
 
 
+# Build detailed cart rows from session product IDs and compute subtotal.
 def get_cart_items():
     cart = session.get('cart', {})
     if not cart:
@@ -85,6 +87,7 @@ def get_cart_items():
     return cart_items, subtotal
 
 
+# Insert a new customer or update an existing one matched by email.
 def upsert_customer(cursor, first_name, last_name, email, phone, address):
     cursor.execute(
         'SELECT CustomerID FROM Customers WHERE email = %s',
@@ -117,6 +120,7 @@ def upsert_customer(cursor, first_name, last_name, email, phone, address):
     return cursor.lastrowid
 
 
+# Fetch a product and its available stock quantity.
 def get_product_stock(product_id):
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
@@ -143,6 +147,7 @@ AVAILABLE_PRODUCT_IMAGES = sorted(
 )
 
 
+# Normalize saved image paths so templates can reliably reference local files.
 def resolve_product_image_path(image_url):
     if not image_url:
         return ''
@@ -157,6 +162,7 @@ def resolve_product_image_path(image_url):
     return f'images/products/{fallback_name}' if fallback_name else ''
 
 
+# Build a filtered and sorted product query from URL parameters.
 def build_products_query(selected_game, sort_option):
     where_clauses = []
     parameters = []
@@ -187,6 +193,7 @@ def build_products_query(selected_game, sort_option):
     return '\n'.join(query), parameters
 
 
+# Return top-priced products for the homepage featured section.
 def get_featured_products(limit=8):
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
@@ -216,6 +223,7 @@ def get_featured_products(limit=8):
     return featured_products
 
 
+# Aggregate summary stats and latest orders for the admin dashboard.
 def get_admin_dashboard_data():
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
@@ -275,6 +283,7 @@ def get_admin_dashboard_data():
     }
 
 
+# Return inventory rows with sortable columns for the admin inventory table.
 def get_admin_inventory_products(sort_by='title', sort_dir='asc'):
     sort_columns = {
         'title': 'Products.title',
@@ -322,6 +331,7 @@ def get_admin_inventory_products(sort_by='title', sort_dir='asc'):
     return products
 
 
+# Return completed order summaries with sortable metrics.
 def get_admin_orders_summary(sort_by='date', sort_dir='desc'):
     sort_columns = {
         'customer': 'customer_name',
@@ -382,6 +392,7 @@ def get_admin_orders_summary(sort_by='date', sort_dir='desc'):
     return orders
 
 
+# Return one order and its line items for the admin order-details view.
 def get_admin_order_details(order_id):
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
@@ -550,7 +561,7 @@ def success():
     return render_template('success.html', cart_count=cart_count, order_details=order_details)
 
 # ------------------------------
-# CART ACTION PLACEHOLDERS
+# CART ACTIONS
 # ------------------------------
 
 @app.route('/add_to_cart/<int:product_id>', methods=['POST'])
@@ -703,7 +714,7 @@ def complete_order():
     return redirect(url_for('success'))
 
 # ------------------------------
-# ADMIN PLACEHOLDERS
+# ADMIN ROUTES
 # ------------------------------
 
 @app.route('/admin')

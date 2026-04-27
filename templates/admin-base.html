@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+<!-- Base layout template for all admin pages. -->
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,9 +19,12 @@
         <h2 class="sidebar-logo">Admin</h2>
 
         <nav class="sidebar-nav">
-            <a href="{{ url_for('admin_dashboard') }}" class="nav-item {% if active=='dashboard' %}active{% endif %}">Dashboard</a>
-            <a href="{{ url_for('admin_inventory') }}" class="nav-item {% if active=='inventory' %}active{% endif %}">Inventory</a>
-            <a href="{{ url_for('admin_orders') }}" class="nav-item {% if active=='orders' %}active{% endif %}">Orders</a>
+            <a href="{{ url_for('admin_dashboard') }}"
+                class="nav-item {% if active=='dashboard' %}active{% endif %}">Dashboard</a>
+            <a href="{{ url_for('admin_inventory') }}"
+                class="nav-item {% if active=='inventory' %}active{% endif %}">Inventory</a>
+            <a href="{{ url_for('admin_orders') }}"
+                class="nav-item {% if active=='orders' %}active{% endif %}">Orders</a>
             <a href="{{ url_for('admin_logout') }}" class="nav-item logout">Logout</a>
         </nav>
     </aside>
@@ -43,4 +48,5 @@
     </div>
 
 </body>
+
 </html>

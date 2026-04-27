@@ -1,55 +1,151 @@
-# CST_150_Project_3
-This repository is for the group project for CST150
+# CST 150 - Project 3 (TCG Store)
 
+Flask web app for a trading card store with:
+- Customer storefront (browse products, cart, checkout)
+- Admin area (dashboard, inventory, orders)
+- MySQL-backed product/order data
 
-Overview
+## Tech Stack
 
-The website project will build your skills in creating websites, working in teams and delivering presentations. These are all vital and fundamental skills for computer science professionals. You will be required to work in groups of 2 to 3 in order to create a full-stack functional website. This will involve consideration of the following:
+- Python 3.13+
+- Flask
+- MySQL Server 8+
+- mysql-connector-python
+- argon2-cffi
 
-Aesthetics
-Usability
-Technical execution
-Responsive web design
-Functionality
-Presentation skills
-Your group will present your website to the class and take questions from the audience. 
+## 1. Clone and Open
 
-Note: Your group can create your own full-stack website idea with the approval of the facilitator.
+1. Clone the repository.
+2. Open the project folder in VS Code.
 
+## 2. Create and Activate a Virtual Environment
 
+From the project root:
 
-Project Goals
+Windows PowerShell:
 
-Your website must incorporate the following features: 
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
 
-Full-stack operations, eg data save, retrieval and presentation
-Responsive operation for desktop, tablet, and mobile
-Demonstration of basic security practices (eg SQL injection, data validation)
+macOS/Linux:
 
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-Process
+## 3. Install Python Dependencies
 
-Create a functioning transaction: You must create a shopping-style website where the shopper can pick from a list of products, add products to a cart, change the purchased quantity of each item, remove unwanted items from the cart, add their (simplified) delivery details (email address, phone number, suburb) and complete the sale. We are not considering additional costs (delivery charges) in this project.
+Use either approach below.
 
-Create an admin sales summary: Make it so the site’s owner (admin) can view the completed sales, identifying each purchaser with the cost price and sale price of each sale. 
+Using pip:
 
-Make a database of products: Make a database and populate it with no less than 10 (digital) products of your choosing. Each product is to have: 
-Product Title
-Product Description 
-Cost Price 
-Sell Price 
-Product Image 
+```bash
+pip install flask flask-sqlalchemy mysql-connector-python argon2-cffi
+```
 
-The user experience and visual aspects (eg colour palette) are entirely at your discretion. As part of your presentation, you will justify your decisions. Whilst the products will be sourced via the database, you don’t need to develop a user-level maintenance page. Any product changes (description, etc) are done directly to the database.
+Using pyproject (if you use uv):
 
-Create your presentation: In your group, make a 5-minute ‘Presentation to the Class’ showcasing your website. Factor in a further 2 minutes for Q&A from all attendees (so 7 minutes in total). You must demonstrate the features of your site, showing how each type of user (shopper/admin) will interact with the site. Be sure to demonstrate both technical and functional aspects of your site and justify your choice of operations and colour palette. Make sure to also include a breakdown of how each student contributed to the project (visualise this in a simple table).
+```bash
+uv sync
+```
 
+## 4. Set Up MySQL
 
-Deliverables: What to Submit
+This project expects a local MySQL database named tcg_store.
 
-In a zip file, submit (one per group):
+Code defaults in main.py are:
+- host: localhost
+- user: root
+- password: (empty string)
+- database: tcg_store
 
-Your group members: Names and student numbers
-A copy of your presentation slides.
-URL of your publicly available website.
-Separated HTML, CSS and JavaScript files (with comments).
+If your local MySQL credentials are different, update the get_db_connection function in main.py before starting the app.
+
+## 5. Create and Seed the Database
+
+Run these SQL files in this order:
+
+1. Database/Create_Database.sql
+2. Database/Products.sql
+3. Database/Inventory.sql
+4. Database/Customers.sql
+5. Database/Orders.sql
+6. Database/OrderItems.sql
+7. Database/Admin.sql
+
+Example (MySQL CLI):
+
+```bash
+mysql -u root -p < Database/Create_Database.sql
+mysql -u root -p tcg_store < Database/Products.sql
+mysql -u root -p tcg_store < Database/Inventory.sql
+mysql -u root -p tcg_store < Database/Customers.sql
+mysql -u root -p tcg_store < Database/Orders.sql
+mysql -u root -p tcg_store < Database/OrderItems.sql
+mysql -u root -p tcg_store < Database/Admin.sql
+```
+
+Notes:
+- Create_Database.sql drops and recreates the database.
+- If you run it again, you will lose seeded data and need to re-run all seed scripts.
+
+## 6. Run the Application
+
+From the project root:
+
+```bash
+python main.py
+```
+
+Then open:
+- Storefront: http://127.0.0.1:5000/
+- Admin Login: http://127.0.0.1:5000/admin/login
+
+## 7. Admin Login
+
+The seed script creates username admin1 in the Admin table.
+
+The password is stored as an Argon2 hash in Database/Admin.sql. If you do not know the original plain-text password, generate a new hash and update the row directly.
+
+Example hash generation:
+
+```bash
+python -c "from argon2 import PasswordHasher; print(PasswordHasher().hash('ChangeMe123!'))"
+```
+
+Then in MySQL:
+
+```sql
+UPDATE Admin
+SET password_hash = 'paste_generated_hash_here'
+WHERE username = 'admin1';
+```
+
+## 8. Common Issues
+
+MySQL connection error:
+- Confirm MySQL server is running.
+- Confirm username/password/host/database in main.py match your local setup.
+
+Module import errors:
+- Re-activate your virtual environment.
+- Re-run dependency install.
+
+No products showing:
+- Verify all SQL seed scripts ran successfully and in order.
+
+## Project Structure
+
+Key paths:
+- main.py: Flask app and routes
+- templates/: Jinja templates for storefront/admin pages
+- static/: CSS, JS, and product images
+- Database/: schema and seed scripts
+
+## Development Notes
+
+- Flask runs in debug mode by default in main.py.
+- A local SQLite file may appear under instance/store.db due to Flask-SQLAlchemy config, but primary app data here is read from MySQL.

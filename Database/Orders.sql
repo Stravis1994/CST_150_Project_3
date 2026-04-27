@@ -1,3 +1,5 @@
+-- Seed sample order headers linked to customers.
+-- Each row references Customers.CustomerID and a total order amount.
 INSERT INTO Orders (CustomerID, order_date, total_amount) VALUES
 (1, '2024-06-01 10:00:00', 150.00),
 (2, '2024-06-02 14:30:00', 200.00),
