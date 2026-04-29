@@ -36,6 +36,7 @@
         <!-- TOP BAR -->
         <!-- Page title container -->
         <header class="topbar">
+            <button class="admin-hamburger" id="adminHamburgerBtn" aria-label="Open admin menu">☰</button>
             <h1 class="page-title">{% block page_title %}{% endblock %}</h1>
         </header>
 
@@ -46,6 +47,19 @@
         </main>
 
     </div>
+
+    <!-- ADMIN MOBILE SIDEBAR (shown on small screens) -->
+    <nav class="mobile-sidebar" id="adminMobileSidebar" aria-hidden="true">
+        <a href="{{ url_for('admin_dashboard') }}"
+            class="nav-item {% if active=='dashboard' %}active{% endif %}">Dashboard</a>
+        <a href="{{ url_for('admin_inventory') }}"
+            class="nav-item {% if active=='inventory' %}active{% endif %}">Inventory</a>
+        <a href="{{ url_for('admin_orders') }}" class="nav-item {% if active=='orders' %}active{% endif %}">Orders</a>
+        <a href="{{ url_for('admin_logout') }}" class="nav-item logout">Logout</a>
+    </nav>
+
+    <!-- Load shared scripts (hamburger toggle, modals) -->
+    <script src="{{ url_for('static', filename='scripts/scripts.js') }}"></script>
 
 </body>
 

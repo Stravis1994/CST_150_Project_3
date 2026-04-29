@@ -275,6 +275,53 @@ body {
   }
 }
 
+/* Admin mobile sidebar overlay */
+.admin-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-size: 1.6rem;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.mobile-sidebar {
+  display: none;
+  position: fixed;
+  inset: 0 auto 0 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 260px;
+  background: black;
+  padding: 2rem 1rem;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+  z-index: 1200;
+  box-sizing: border-box;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+}
+
+@media (max-width: 700px) {
+  .admin-hamburger {
+    display: inline-block;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .mobile-sidebar .nav-item {
+    padding: 0.85rem 0.75rem;
+    margin-bottom: 0.25rem;
+    border-radius: 8px;
+  }
+}
+
 
 /* ------------------------------
    LOGIN PAGE
@@ -423,6 +470,65 @@ body {
 @media (max-width: 900px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Responsive admin tables: stack rows into cards on small screens */
+@media (max-width: 900px) {
+  .admin-table thead {
+    display: none;
+  }
+
+  .admin-table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    padding: 0.9rem;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .admin-table td {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.45rem 0;
+    border: none;
+    align-items: center;
+  }
+
+  .admin-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--text-muted);
+    flex: 0 0 38%;
+    max-width: 38%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-table td img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: calc(var(--radius) / 2);
+  }
+
+  .stock-form {
+    flex-direction: row;
+    gap: 0.4rem;
+    align-items: center;
+  }
+
+  .stock-form input[type="number"] {
+    width: 64px;
+  }
+
+  .order-row-hint {
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
   }
 }
 

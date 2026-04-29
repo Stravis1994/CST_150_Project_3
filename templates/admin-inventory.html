@@ -59,16 +59,16 @@
         <tbody>
             {% for product in products %}
             <tr>
-                <td>
+                <td data-label="Image">
                     <img src="{{ url_for('static', filename='images/products/' + product.image) }}"
                         alt="{{ product.title }}" class="inventory-img">
                 </td>
 
-                <td>{{ product.title }}</td>
-                <td>{{ product.quantity }}</td>
-                <td>${{ product.cost_price }}</td>
-                <td>${{ product.sell_price }}</td>
-                <td>
+                <td data-label="Title">{{ product.title }}</td>
+                <td data-label="Quantity">{{ product.quantity }}</td>
+                <td data-label="Cost Price">${{ product.cost_price }}</td>
+                <td data-label="Sell Price">${{ product.sell_price }}</td>
+                <td data-label="Add Stock">
                     <form method="POST" action="{{ url_for('admin_add_stock', product_id=product.id) }}"
                         class="stock-form">
                         <input type="number" name="stock_to_add" min="1" step="1" value="1" required>

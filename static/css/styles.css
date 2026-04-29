@@ -199,6 +199,33 @@ select {
   font-size: 2rem;
 }
 
+/* ensure primary nav hides on small screens and hamburger becomes visible */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .nav-container {
+    gap: 1rem;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+
+  .hero {
+    padding: 3rem 1rem;
+  }
+
+  .product-card img {
+    height: 160px;
+  }
+}
+
 /* Slide-down mobile menu */
 .mobile-nav {
   display: none;

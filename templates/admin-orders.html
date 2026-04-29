@@ -76,23 +76,23 @@
             {% for order in orders %}
             <tr class="order-row-clickable"
                 onclick="window.location='{{ url_for('admin_order_details', order_id=order.order_id) }}'">
-                <td>
+                <td data-label="Customer">
                     {{ order.customer_name }}
                     <div class="order-row-hint">View order #{{ order.order_id }}</div>
                 </td>
-                <td>{{ order.email }}</td>
-                <td>{{ order.phone }}</td>
-                <td>{{ order.address }}</td>
+                <td data-label="Email">{{ order.email }}</td>
+                <td data-label="Phone">{{ order.phone }}</td>
+                <td data-label="Address">{{ order.address }}</td>
 
-                <td>${{ order.cost_price }}</td>
-                <td>${{ order.sell_price }}</td>
+                <td data-label="Cost Price">${{ order.cost_price }}</td>
+                <td data-label="Sell Price">${{ order.sell_price }}</td>
 
                 <!-- Profit highlight -->
-                <td style="color: var(--accent); font-weight: bold;">
+                <td data-label="Profit" style="color: var(--accent); font-weight: bold;">
                     ${{ order.profit }}
                 </td>
 
-                <td>{{ order.date }}</td>
+                <td data-label="Date">{{ order.date }}</td>
             </tr>
             {% else %}
             <tr>

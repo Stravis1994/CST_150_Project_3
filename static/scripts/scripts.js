@@ -9,6 +9,26 @@ if (hamburgerBtn && mobileNav) {
   };
 }
 
+// Admin mobile sidebar toggle
+const adminHamburgerBtn = document.getElementById("adminHamburgerBtn");
+const adminMobileSidebar = document.getElementById("adminMobileSidebar");
+
+if (adminHamburgerBtn && adminMobileSidebar) {
+  adminHamburgerBtn.onclick = () => {
+    const visible = adminMobileSidebar.style.display === "flex";
+    adminMobileSidebar.style.display = visible ? "none" : "flex";
+    adminMobileSidebar.setAttribute('aria-hidden', String(visible));
+  };
+
+  // close sidebar when clicking a link inside it
+  adminMobileSidebar.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A') {
+      adminMobileSidebar.style.display = 'none';
+      adminMobileSidebar.setAttribute('aria-hidden', 'true');
+    }
+  });
+}
+
 const productModal = document.getElementById("productModal");
 const productModalImage = document.getElementById("productModalImage");
 const productModalMeta = document.getElementById("productModalMeta");
